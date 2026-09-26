@@ -1,0 +1,28 @@
+# Runtime/generated material
+logs/*
+reports/generated/*
+evidence/*/processed/*
+evidence/*/screenshots/*
+
+# Local secrets / credentials
+*.key
+*.pem
+*.p12
+*.pfx
+.env
+.env.*
+
+# Editor / OS files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+
+# Keep directory placeholders
+!.gitkeep
