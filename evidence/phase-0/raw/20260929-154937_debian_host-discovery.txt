@@ -1,0 +1,323 @@
+SOC-LAB Phase 0 — Host Discovery
+Timestamp: 2026-09-29T15:49:37+01:00
+Host: debian
+
+===== virsh list --all =====
+ Id   Name               State
+----------------------------------
+ 1    win10-victim       running
+ 2    ubuntu-monitor     running
+ 3    parrot-attack-v2   running
+
+
+===== virsh net-list --all =====
+ Name          State    Autostart   Persistent
+------------------------------------------------
+ default       active   yes         yes
+ soc-attack    active   yes         yes
+ soc-monitor   active   yes         yes
+ soc-router    active   yes         yes
+ soc-victim    active   yes         yes
+
+
+===== dominfo parrot-attack-v2 =====
+Id:             3
+Name:           parrot-attack-v2
+UUID:           50a4faa3-4d84-41ab-82c0-16d822c9ccfe
+OS Type:        hvm
+State:          running
+CPU(s):         4
+CPU time:       31.6s
+Max memory:     4194304 KiB
+Used memory:    4194304 KiB
+Persistent:     yes
+Autostart:      disable
+Autostart Once: disable
+Managed save:   no
+Security model: apparmor
+Security DOI:   0
+Security label: libvirt-50a4faa3-4d84-41ab-82c0-16d822c9ccfe (enforcing)
+
+
+===== domiflist parrot-attack-v2 =====
+ Interface   Type      Source        Model    MAC
+-----------------------------------------------------------------
+ vnet6       network   soc-attack    virtio   52:54:00:af:87:bb
+ vnet7       network   soc-monitor   virtio   52:54:00:e1:e4:11
+ vnet8       network   default       virtio   52:54:00:90:ef:c2
+
+
+===== dominfo ubuntu-monitor =====
+Id:             2
+Name:           ubuntu-monitor
+UUID:           1011a07a-980a-45c4-a1f4-0d8b8d3c3382
+OS Type:        hvm
+State:          running
+CPU(s):         2
+CPU time:       14.1s
+Max memory:     4194304 KiB
+Used memory:    4194304 KiB
+Persistent:     yes
+Autostart:      disable
+Autostart Once: disable
+Managed save:   no
+Security model: apparmor
+Security DOI:   0
+Security label: libvirt-1011a07a-980a-45c4-a1f4-0d8b8d3c3382 (enforcing)
+
+
+===== domiflist ubuntu-monitor =====
+ Interface   Type      Source        Model    MAC
+-----------------------------------------------------------------
+ vnet3       network   soc-monitor   virtio   52:54:00:af:4e:a1
+ vnet4       network   soc-victim    virtio   52:54:00:91:a2:2e
+ vnet5       network   default       virtio   52:54:00:be:ec:8a
+
+
+===== dominfo win10-victim =====
+Id:             1
+Name:           win10-victim
+UUID:           3ea2d4ce-ab60-4671-9039-bb179155a242
+OS Type:        hvm
+State:          running
+CPU(s):         2
+CPU time:       144.4s
+Max memory:     4194304 KiB
+Used memory:    4194304 KiB
+Persistent:     yes
+Autostart:      disable
+Autostart Once: disable
+Managed save:   no
+Security model: apparmor
+Security DOI:   0
+Security label: libvirt-3ea2d4ce-ab60-4671-9039-bb179155a242 (enforcing)
+
+
+===== domiflist win10-victim =====
+ Interface   Type      Source        Model    MAC
+-----------------------------------------------------------------
+ vnet0       network   soc-victim    virtio   52:54:00:54:5e:f9
+ vnet1       network   soc-monitor   virtio   52:54:00:66:9f:8e
+ vnet2       network   default       virtio   52:54:00:c6:f0:8b
+
+
+===== net-info default =====
+Name:           default
+UUID:           edcbe7ed-0976-43f6-800b-452d46dbe5e4
+Active:         yes
+Persistent:     yes
+Autostart:      yes
+Bridge:         virbr0
+
+
+===== net-dumpxml default =====
+<network connections='3'>
+  <name>default</name>
+  <uuid>edcbe7ed-0976-43f6-800b-452d46dbe5e4</uuid>
+  <forward mode='nat'>
+    <nat>
+      <port start='1024' end='65535'/>
+    </nat>
+  </forward>
+  <bridge name='virbr0' stp='on' delay='0'/>
+  <mac address='52:54:00:ab:4b:b8'/>
+  <ip address='192.168.122.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.122.2' end='192.168.122.254'/>
+    </dhcp>
+  </ip>
+</network>
+
+
+===== net-dhcp-leases default =====
+ Expiry Time           MAC address         Protocol   IP address           Hostname         Client ID or DUID
+------------------------------------------------------------------------------------------------------------------
+ 2026-09-29 16:48:51   52:54:00:90:ef:c2   ipv4       192.168.122.91/24    parrot           01:52:54:00:90:ef:c2
+ 2026-09-29 16:48:19   52:54:00:be:ec:8a   ipv4       192.168.122.26/24    ubuntu-monitor   01:52:54:00:be:ec:8a
+ 2026-09-29 16:48:19   52:54:00:c6:f0:8b   ipv4       192.168.122.153/24   WIN10-VICTIM     01:52:54:00:c6:f0:8b
+
+
+===== net-info soc-attack =====
+Name:           soc-attack
+UUID:           34f29558-0dcb-46ef-9f6b-4de3b53b4ae4
+Active:         yes
+Persistent:     yes
+Autostart:      yes
+Bridge:         virbr1
+
+
+===== net-dumpxml soc-attack =====
+<network connections='1'>
+  <name>soc-attack</name>
+  <uuid>34f29558-0dcb-46ef-9f6b-4de3b53b4ae4</uuid>
+  <bridge name='virbr1' stp='on' delay='0'/>
+  <mac address='52:54:00:26:73:d7'/>
+  <domain name='soc-attack'/>
+  <ip address='192.168.100.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.100.10' end='192.168.100.100'/>
+    </dhcp>
+  </ip>
+</network>
+
+
+===== net-dhcp-leases soc-attack =====
+ Expiry Time           MAC address         Protocol   IP address          Hostname   Client ID or DUID
+-----------------------------------------------------------------------------------------------------------
+ 2026-09-29 16:48:51   52:54:00:af:87:bb   ipv4       192.168.100.90/24   parrot     01:52:54:00:af:87:bb
+
+
+===== net-info soc-monitor =====
+Name:           soc-monitor
+UUID:           60878d93-f0c0-4749-af23-9af0bbac5c6a
+Active:         yes
+Persistent:     yes
+Autostart:      yes
+Bridge:         virbr3
+
+
+===== net-dumpxml soc-monitor =====
+<network connections='3'>
+  <name>soc-monitor</name>
+  <uuid>60878d93-f0c0-4749-af23-9af0bbac5c6a</uuid>
+  <bridge name='virbr3' stp='on' delay='0'/>
+  <mac address='52:54:00:7a:f8:a1'/>
+  <domain name='soc-monitor'/>
+  <ip address='192.168.50.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.50.10' end='192.168.50.100'/>
+    </dhcp>
+  </ip>
+</network>
+
+
+===== net-dhcp-leases soc-monitor =====
+ Expiry Time           MAC address         Protocol   IP address         Hostname         Client ID or DUID
+----------------------------------------------------------------------------------------------------------------------------------------------------
+ 2026-09-29 16:48:19   52:54:00:66:9f:8e   ipv4       192.168.50.16/24   WIN10-VICTIM     01:52:54:00:66:9f:8e
+ 2026-09-29 16:48:19   52:54:00:af:4e:a1   ipv4       192.168.50.20/24   ubuntu-monitor   ff:56:50:4d:98:00:02:00:00:ab:11:5c:6f:3f:04:db:31:ab:46
+ 2026-09-29 16:48:51   52:54:00:e1:e4:11   ipv4       192.168.50.29/24   parrot           01:52:54:00:e1:e4:11
+
+
+===== net-info soc-victim =====
+Name:           soc-victim
+UUID:           1ed01345-f7ad-4b8c-b91d-4dc974a1d43a
+Active:         yes
+Persistent:     yes
+Autostart:      yes
+Bridge:         virbr2
+
+
+===== net-dumpxml soc-victim =====
+<network connections='2'>
+  <name>soc-victim</name>
+  <uuid>1ed01345-f7ad-4b8c-b91d-4dc974a1d43a</uuid>
+  <bridge name='virbr2' stp='on' delay='0'/>
+  <mac address='52:54:00:10:5c:b7'/>
+  <domain name='soc-victim'/>
+  <ip address='192.168.200.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.200.10' end='192.168.200.100'/>
+    </dhcp>
+  </ip>
+</network>
+
+
+===== net-dhcp-leases soc-victim =====
+ Expiry Time           MAC address         Protocol   IP address          Hostname         Client ID or DUID
+-----------------------------------------------------------------------------------------------------------------
+ 2026-09-29 16:48:19   52:54:00:54:5e:f9   ipv4       192.168.200.98/24   WIN10-VICTIM     01:52:54:00:54:5e:f9
+ 2026-09-29 16:48:19   52:54:00:91:a2:2e   ipv4       192.168.200.73/24   ubuntu-monitor   01:52:54:00:91:a2:2e
+
+
+===== net-info soc-router =====
+Name:           soc-router
+UUID:           501f3916-8f00-43c2-9a52-dd78d996cdea
+Active:         yes
+Persistent:     yes
+Autostart:      yes
+Bridge:         virbr4
+
+
+===== net-dumpxml soc-router =====
+<network>
+  <name>soc-router</name>
+  <uuid>501f3916-8f00-43c2-9a52-dd78d996cdea</uuid>
+  <forward mode='nat'>
+    <nat>
+      <port start='1024' end='65535'/>
+    </nat>
+  </forward>
+  <bridge name='virbr4' stp='on' delay='0'/>
+  <mac address='52:54:00:18:73:31'/>
+  <domain name='soc-router'/>
+  <ip address='10.0.0.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='10.0.0.10' end='10.0.0.50'/>
+    </dhcp>
+  </ip>
+</network>
+
+
+===== net-dhcp-leases soc-router =====
+ Expiry Time   MAC address   Protocol   IP address   Hostname   Client ID or DUID
+-----------------------------------------------------------------------------------
+
+
+===== ip -br addr =====
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+enp10s0          UP             192.168.1.215/24 2a00:23c8:e4b:c901:ac6d:389e:6c8:4f4f/64 2a00:23c8:e4b:c901:365a:60ff:fe61:6ad4/64 fe80::365a:60ff:fe61:6ad4/64 
+virbr1           UP             192.168.100.1/24 
+virbr2           UP             192.168.200.1/24 
+virbr4           DOWN           10.0.0.1/24 
+virbr3           UP             192.168.50.1/24 
+virbr0           UP             192.168.122.1/24 
+vnet0            UNKNOWN        fe80::fc54:ff:fe54:5ef9/64 
+vnet1            UNKNOWN        fe80::fc54:ff:fe66:9f8e/64 
+vnet2            UNKNOWN        fe80::fc54:ff:fec6:f08b/64 
+vnet3            UNKNOWN        fe80::fc54:ff:feaf:4ea1/64 
+vnet4            UNKNOWN        fe80::fc54:ff:fe91:a22e/64 
+vnet5            UNKNOWN        fe80::fc54:ff:febe:ec8a/64 
+vnet6            UNKNOWN        fe80::fc54:ff:feaf:87bb/64 
+vnet7            UNKNOWN        fe80::fc54:ff:fee1:e411/64 
+vnet8            UNKNOWN        fe80::fc54:ff:fe90:efc2/64 
+
+===== ip route =====
+default via 192.168.1.254 dev enp10s0 proto dhcp src 192.168.1.215 metric 100 
+10.0.0.0/24 dev virbr4 proto kernel scope link src 10.0.0.1 linkdown 
+192.168.1.0/24 dev enp10s0 proto kernel scope link src 192.168.1.215 metric 100 
+192.168.50.0/24 dev virbr3 proto kernel scope link src 192.168.50.1 
+192.168.100.0/24 dev virbr1 proto kernel scope link src 192.168.100.1 
+192.168.122.0/24 dev virbr0 proto kernel scope link src 192.168.122.1 
+192.168.200.0/24 dev virbr2 proto kernel scope link src 192.168.200.1 
+
+===== ip addr show virbr0 =====
+7: virbr0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 52:54:00:ab:4b:b8 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.122.1/24 brd 192.168.122.255 scope global virbr0
+       valid_lft forever preferred_lft forever
+
+===== ip addr show virbr1 =====
+3: virbr1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 52:54:00:26:73:d7 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.100.1/24 brd 192.168.100.255 scope global virbr1
+       valid_lft forever preferred_lft forever
+
+===== ip addr show virbr2 =====
+4: virbr2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 52:54:00:10:5c:b7 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.200.1/24 brd 192.168.200.255 scope global virbr2
+       valid_lft forever preferred_lft forever
+
+===== ip addr show virbr3 =====
+6: virbr3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 52:54:00:7a:f8:a1 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.50.1/24 brd 192.168.50.255 scope global virbr3
+       valid_lft forever preferred_lft forever
+
+===== ip addr show virbr4 =====
+5: virbr4: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 52:54:00:18:73:31 brd ff:ff:ff:ff:ff:ff
+    inet 10.0.0.1/24 brd 10.0.0.255 scope global virbr4
+       valid_lft forever preferred_lft forever
+
