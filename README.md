@@ -3,7 +3,7 @@
 A deliberately structured home SOC/NOC training environment built around
 practical operational skills.
 
-## Current phase
+## First phase
 
 **Phase 0 — Asset and Network Discovery**
 
@@ -55,3 +55,12 @@ The workflow is:
 8. Document
 
 See `docs/phase-0/phase-0-plan.md`.
+
+
+## Current Project Status
+
+Phase 0 – Discovery, Inventory and Baseline (Complete)
+
+Current Release: phase-0-complete
+
+Next Phase: Phase 1 – Monitoring and Visibility
