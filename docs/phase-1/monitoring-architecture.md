@@ -16,6 +16,39 @@ investigation, or response capabilities.
 
 This phase prioritises telemetry collection and validation.
 
+## Architectural Context
+
+Phase 0 validation confirmed that the current SOC-LAB architecture is
+multi-homed rather than router-centric.
+
+Current monitoring targets participate in multiple network segments:
+
+- ubuntu-monitor
+- win10-victim
+- parrot-attack-v2
+
+Phase 0 evidence also confirmed:
+
+- soc-monitor is active and in use
+- soc-victim is active and in use
+- soc-attack is active and in use
+- default NAT is active and in use
+- soc-router exists but currently has no attached systems
+
+As a result, Phase 1 visibility activities focus on:
+
+- Interface identification
+- Interface-to-network mapping
+- Packet observation
+- Traffic source validation
+- Telemetry collection
+
+rather than inter-network routing analysis.
+
+The primary monitoring challenge is determining which interfaces
+provide visibility into relevant traffic flows within the multi-homed
+lab environment.
+
 ---
 
 # Monitoring Objectives
@@ -46,20 +79,123 @@ Primary Question:
 | win10-victim     | Simulated user workstation             |
 | parrot-attack-v2 | Simulated attacker workstation         |
 
-## Monitored Networks
+### Monitored Networks
 
-| Network       | Purpose                                  |
-|---------------|------------------------------------------|
-| soc-monitor   | Monitoring and management traffic        |
-| soc-victim    | Victim workstation traffic               |
-| soc-attack    | Attacker traffic                         |
-| default (NAT) | Internet access and package installation |
+| Network     | Subnet           | Purpose                           |
+|-------------|------------------|-----------------------------------|
+| soc-monitor | 192.168.50.0/24  | Monitoring and management traffic |
+| soc-victim  | 192.168.200.0/24 | Victim workstation traffic        |
+| soc-attack  | 192.168.100.0/24 | Attack traffic                    |
+| default     | 192.168.122.0/24 | Internet access via NAT           |
+| soc-router  | 10.0.0.0/24      | Reserved future infrastructure    |
+
+---
+
+## Reserved Infrastructure
+
+### soc-router Network
+
+The SOC-LAB environment contains a provisioned libvirt network named
+`soc-router`.
+
+Network Details:
+
+```text
+Network: 10.0.0.0/24
+Bridge: virbr4
+```
+
+Phase 0 validation identified the following characteristics:
+
+- Network exists and is active in libvirt
+- No virtual machines are currently attached
+- No DHCP leases were observed
+- Bridge interface `virbr4` is currently DOWN
+
+Current Status:
+
+```text
+Provisioned but not actively used
+```
+
+The network is reserved for future architecture expansion, including:
+
+- Routing experiments
+- Gateway deployment
+- Network segmentation exercises
+- Firewall testing
+- Traffic inspection architecture
+
+Phase 1 monitoring activities focus on the active lab networks:
+
+- soc-monitor
+- soc-victim
+- soc-attack
+- default (NAT)
+
+---
+
+
+## Monitoring Considerations
+
+Traffic visibility depends on where monitoring tools are deployed.
+
+During interface visibility validation, special attention should be paid
+to determining whether observed traffic is:
+
+- Local network traffic
+- Multi-homed host traffic
+- Cross-network communications
+- NAT-based communications
+
+Understanding these paths is required before deploying Suricata or
+collecting baseline packet captures.
 
 ---
 
 # Monitoring Strategy
 
 Monitoring is implemented using a layered approach.
+
+## Current Phase 1 Topology
+
+Phase 0 validation observed the following address assignments.
+
+ubuntu-monitor
+
+- soc-monitor (192.168.50.20)
+- soc-victim (192.168.200.73)
+- default (192.168.122.26)
+
+win10-victim
+
+- soc-monitor (192.168.50.16)
+- soc-victim (192.168.200.98)
+- default (192.168.122.153)
+
+parrot-attack-v2
+
+- soc-monitor (192.168.50.29)
+- soc-attack (192.168.100.90)
+- default (192.168.122.91)
+
+---
+
+### Layer 1 Assumption Validation
+
+Phase 0 demonstrated that all monitored systems are multi-homed.
+
+Before packet capture tooling is deployed, the following questions must
+be answered:
+
+- Which interface carries target traffic?
+- Which interface carries management traffic?
+- Which interface carries attack traffic?
+- Which interface provides the most useful monitoring visibility?
+
+Interface selection must be validated before Suricata deployment.
+
+---
 
 ## Layer 1 - Interface Visibility
 

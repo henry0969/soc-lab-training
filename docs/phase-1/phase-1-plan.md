@@ -10,7 +10,9 @@ PLANNED
 
 Establish monitoring visibility across the SOC Lab environment.
 
-Phase 1 focuses on collecting and validating telemetry before introducing detection or incident response workflows.
+Phase 0 validation confirmed that the current SOC-LAB architecture is multi-homed rather than dependent on a dedicated routing network.
+
+Traffic visibility in Phase 1 therefore focuses on interface selection, network membership, and packet observation rather than inter-network routing analysis.
 
 The objective is to answer:
 
@@ -45,9 +47,14 @@ Assets:
 
 Networks:
 
-- soc-monitor
-- soc-victim
-- soc-attack
+- soc-monitor (192.168.50.0/24)
+- soc-victim  (192.168.200.0/24)
+- soc-attack  (192.168.100.0/24)
+- default NAT (192.168.122.0/24)
+
+Reserved Infrastructure:
+
+- soc-router (10.0.0.0/24)
 
 ---
 
@@ -73,6 +80,40 @@ Success Criteria:
 
 ---
 
+### D1.5 - Interface Mapping and Visibility Validation
+
+Objective:
+
+Document how traffic flows through the current multi-homed lab
+architecture.
+
+Tasks:
+
+- Identify ubuntu-monitor interfaces
+- Map interfaces to networks
+- Map IP addresses to network segments
+- Validate visible traffic sources
+- Record interface inventory
+
+Tools:
+
+- ip address
+- ip route
+- tcpdump
+- virsh
+
+Success Criteria:
+
+- Interface-to-network mapping documented
+- Traffic visibility validated
+- Evidence stored
+
+Evidence:
+
+evidence/phase-1/raw/
+
+---
+
 ## D2 - Packet Capture Validation
 
 Capture traffic from:
@@ -80,6 +121,14 @@ Capture traffic from:
 - soc-monitor
 - soc-victim
 - soc-attack
+- default (NAT)
+
+Validate:
+
+- Which interfaces receive traffic
+- Which interfaces receive management traffic
+- Which interfaces receive attack traffic
+- Which interfaces receive NAT traffic
 
 Tools:
 
@@ -258,4 +307,3 @@ Before Phase 1 sign-off:
 Status:
 
 PENDING
-``

@@ -3,7 +3,7 @@
 A deliberately structured home SOC/NOC training environment built around
 practical operational skills.
 
-## First phase
+## Completed Phase
 
 **Phase 0 — Asset and Network Discovery**
 
@@ -23,8 +23,7 @@ Phase 0 establishes a known-good baseline of:
 
 ## Safety boundary
 
-The training scripts in this repository are intended to **observe and document**
-the lab.
+The training scripts in this repository are intended to **observe and document** the lab.
 
 They should not silently modify:
 
@@ -63,4 +62,6 @@ Phase 0 – Discovery, Inventory and Baseline (Complete)
 
 Current Release: phase-0-complete
 
-Next Phase: Phase 1 – Monitoring and Visibility
+Phase 1 Status: Planned
+
+Next Phase: Monitoring and Visibility
